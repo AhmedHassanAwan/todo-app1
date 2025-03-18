@@ -3,36 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
+    <title>Responsive Todo App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/js/all.min.js"></script>
 </head>
-<body>
-
-
-
-    
-
-    <div id="container">
-        <h1 style="color: blue;">To-Do List <i class="fa-solid fa-list"></i></h1> 
-
-        <div id="search">
-
-            <input type="text" id="input" placeholder="Enter a Task here....">
-            <button id="search-btn" onclick="add()">Add</button>
+<body class="flex items-center justify-center min-h-screen bg-gradient-to-r from-green-400 to-blue-500">
+    <div class="bg-white shadow-lg rounded-lg p-6 w-96">
+        <h1 class="text-2xl font-bold text-center text-blue-600">To-Do List <i class="fa-solid fa-list"></i></h1>
+        <div class="flex mt-4">
+            <input type="text" id="input" placeholder="Add your new task" class="w-full p-2 border rounded-l">
+            <button id="add-btn" class="bg-purple-600 text-white px-4 py-2 rounded-r" onclick="add()">+</button>
         </div>
-        
-        
-        <div id="output">
-            
-        </div>
+        <div id="output" class="mt-4 space-y-2"></div>
     </div>
 
-  
+    <script>
+        const input = document.querySelector("#input");
+        const div = document.querySelector("#output");
+        let arr = [];
 
+        function add() {
+            if (input.value.trim() === "") return;
+            arr.push(input.value);
+            renderList();
+            input.value = "";
+        }
 
+        function deleteItem(index) {
+            arr.splice(index, 1);
+            renderList();
+        }
 
+        function edit(index) {
+            let newValue = prompt("Enter new value", arr[index]);
+            if (newValue) {
+                arr[index] = newValue;
+                renderList();
+            }
+        }
 
-    <script src="app.js"></script>
+        function renderList() {
+            div.innerHTML = "";
+            arr.forEach((task, i) => {
+                div.innerHTML += `
+                    <div class="flex justify-between items-center bg-gray-100 p-2 rounded shadow">
+                        <span>${task}</span>
+                        <div>
+                            <i class="fa-solid fa-pen text-blue-500 cursor-pointer" onclick="edit(${i})"></i>
+                            <i class="fa-solid fa-trash text-red-500 cursor-pointer ml-2" onclick="deleteItem(${i})"></i>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+    </script>
 </body>
 </html>
